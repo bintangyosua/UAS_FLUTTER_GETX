@@ -57,8 +57,8 @@ class ProductView extends StatelessWidget {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showProductDialog(context),
-        child: const Icon(Icons.add),
         backgroundColor: Colors.white,
+        child: const Icon(Icons.add),
       ),
     );
   }

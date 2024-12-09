@@ -6,36 +6,26 @@ class LoginController extends GetxController {
   var isLogged = false.obs;
   final SupabaseClient supabase = Supabase.instance.client;
 
-  // Method to login using custom query to users table
   Future<void> login(String username, String password) async {
     try {
-      // Query the 'users' table to check if the username exists
       final response = await supabase
           .from('users')
-          .select('id, username, password')  // Assuming the users table has columns id, username, password
+          .select('id, username, password')
           .eq('username', username);
       
       print('res: $response');
 
-      // Check if the password matches (assuming plaintext password here, ideally use hashing)
       final userData = response;
       if (userData[0]['password'] == password) {
-        // Save user login state to SharedPreferences
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('username', username);
-
-        // Update login state
         isLogged.value = true;
-
-        // Navigate to the dashboard
         Get.offAllNamed('/dashboard');
       } else {
-        // If password doesn't match
         Get.snackbar('Error', 'Username or password is incorrect.');
       }
     } catch (e) {
-      // Handle unexpected error
       Get.snackbar('Error', 'Username or password is incorrect.');
     }
   }

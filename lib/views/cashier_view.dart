@@ -64,6 +64,7 @@ class CashierView extends StatelessWidget {
   void completeTransaction() {
     Get.defaultDialog(
       title: 'Konfirmasi',
+      backgroundColor: Colors.white,
       middleText: 'Apakah Anda yakin ingin menyelesaikan transaksi?',
       titleStyle: const TextStyle(color: Colors.black),
       middleTextStyle: const TextStyle(color: Colors.black),

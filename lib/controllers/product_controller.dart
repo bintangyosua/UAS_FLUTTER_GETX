@@ -5,7 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProductController extends GetxController {
   final _supabaseClient = Supabase.instance.client;
   var isLoading = false.obs;
-  var products = <Product>[].obs;  // Daftar produk yang akan ditampilkan
+  var products = <Product>[].obs;
 
   @override
   void onInit() {
@@ -13,7 +13,6 @@ class ProductController extends GetxController {
     fetchProducts();
   }
 
-  // Mengambil produk dari Supabase
   void fetchProducts() async {
     isLoading(true);
     try {
@@ -26,12 +25,11 @@ class ProductController extends GetxController {
     }
   }
 
-  // Fungsi untuk menambah produk baru
   void addProduct(Product product) async {
     isLoading(true);
     try {
       final response = await _supabaseClient.from('products').insert(product.toJson());
-      fetchProducts();  // Refresh data produk setelah berhasil ditambahkan
+      fetchProducts();
       Get.snackbar('Success', 'Produk berhasil ditambahkan');
     } catch (e) {
       Get.snackbar('Error', e.toString());
@@ -40,17 +38,16 @@ class ProductController extends GetxController {
     }
   }
 
-  // Fungsi untuk mengedit produk
   void editProduct(Product product) async {
   isLoading(true);
   try {
     final response = await _supabaseClient
         .from('products')
-        .update(product.toJson()) // Menggunakan product yang sudah ada
-        .eq('id', product.id as Object); // Menjamin hanya produk dengan id yang sama yang diperbarui
+        .update(product.toJson()) 
+        .eq('id', product.id as Object);
 
     Get.snackbar('Success', 'Produk berhasil diperbarui');
-    fetchProducts(); // Refresh data produk setelah berhasil diupdate
+    fetchProducts();
   } catch (e) {
     Get.snackbar('Error', e.toString());
   } finally {

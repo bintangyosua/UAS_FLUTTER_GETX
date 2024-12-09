@@ -30,13 +30,10 @@ class CashierController extends GetxController {
       await _transaction.from('transactions').insert(transaction.toJson());
       Get.snackbar('Success', 'Berhasil menambahkan Data');
       findTransaction();
-/// the error and displays an error message in a snackbar.
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
       isLoading(false);
     }
   }
-
-  void calculateTotalPrice() {}
 }

@@ -106,7 +106,7 @@ class _LoginViewState extends State<LoginView> {
                     Get.snackbar(
                       'Error',
                       'Username and password cannot be empty.',
-                      snackPosition: SnackPosition.BOTTOM,
+                      snackPosition: SnackPosition.TOP,
                     );
                   }
                 },
