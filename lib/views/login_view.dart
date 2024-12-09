@@ -35,7 +35,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Welcome Back!',
+                'Point of Sale (POS)',
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,

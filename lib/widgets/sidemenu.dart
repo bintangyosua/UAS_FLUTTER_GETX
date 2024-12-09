@@ -47,14 +47,14 @@ class Sidemenu extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.person),
-          title: const Text('Cashier'),
+          title: const Text('Kasir'),
           onTap: () {
             Get.toNamed('/cashier');
           },
         ),
         ListTile(
           leading: const Icon(Icons.shopping_basket),
-          title: const Text('Products'),
+          title: const Text('Produk'),
           onTap: () {
             Get.toNamed('/products');
           },
