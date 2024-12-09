@@ -25,7 +25,6 @@ class DashboardView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Ringkasan Penjualan (Total Sales, Average Sales, and Transactions)
             Obx(() {
               return Row(
                 children: [

@@ -24,4 +24,13 @@ class Product {
       'price': price,
     };
   }
+
+  // Fungsi untuk membuat salinan produk dengan quantity yang baru
+  Product copyWith({int? quantity, required int qty}) {
+    return Product(
+      id: this.id,
+      name: this.name,
+      price: this.price,
+    );
+  }
 }
