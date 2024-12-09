@@ -6,8 +6,10 @@ class DashboardController extends GetxController {
   var dailySales = <int>[].obs;  // Daftar untuk menyimpan total harga transaksi
   var saleDates = <String>[].obs; // Daftar untuk menyimpan tanggal transaksi
   var totalSales = 0.obs;    // Total penjualan hari ini
+  var totalTodaySales = 0.00.obs;
   var totalTransactions = 0.obs;  // Jumlah transaksi
   var meanSales = 0.00.obs;
+  var totalTodayTransactions = 0.obs;  // Jumlah transaksi hari ini
 
   // Fungsi untuk memuat data penjualan dari Supabase
   Future<void> loadSalesData() async {
@@ -17,8 +19,6 @@ class DashboardController extends GetxController {
           .from('transactions')
           .select('total_price, created_at')
           .order('created_at', ascending: true);
-
-      // Check for any errors in the response
 
       // Print the response data for debugging purposes
       // Extract sales data and date information
@@ -41,7 +41,18 @@ class DashboardController extends GetxController {
       totalTransactions.value = response.length;
       meanSales.value = totalSales.value / dailySales.length;
 
-      print(saleDates);
+      final todayDate = DateFormat('dd MMM').format(DateTime.now());
+      totalTodaySales.value = sales
+          .where((e) => DateFormat('dd MMM').format(DateTime.parse(e['created_at'])) == todayDate)
+          .fold(0.0, (sum, e) => sum + e['total_price']);
+
+      // Calculate total transactions for today
+      totalTodayTransactions.value = sales
+          .where((e) => DateFormat('dd MMM').format(DateTime.parse(e['created_at'])) == todayDate)
+          .length;
+      
+      print(totalTodaySales);
+
     } catch (e) {
       // Handle any exceptions or errors that may occur
       Get.snackbar('Error', 'Terjadi kesalahan: $e');

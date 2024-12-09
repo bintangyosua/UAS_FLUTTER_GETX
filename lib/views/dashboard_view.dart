@@ -27,18 +27,30 @@ class DashboardView extends StatelessWidget {
           children: [
             // Ringkasan Penjualan (Total Sales, Average Sales, and Transactions)
             Obx(() {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return Row(
                 children: [
-                  _buildSummaryList('Total Penjualan', 'Rp${controller.totalSales.toStringAsFixed(2)}', Icons.attach_money),
-                  const SizedBox(height: 16), // Space between cards
-                  _buildSummaryList('Rata-rata Penjualan', 'Rp${controller.meanSales.toStringAsFixed(2)}', Icons.attach_money),
-                  const SizedBox(height: 16), // Space between cards
-                  _buildSummaryList('Jumlah Transaksi', '${controller.totalTransactions}', Icons.numbers),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSummaryList('Total', 'Rp${controller.totalSales.toStringAsFixed(2)}', Icons.attach_money),
+                        _buildSummaryList('Keseluruhan', '${controller.totalTransactions}', Icons.numbers),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSummaryList('Total Hari ini', 'Rp${controller.totalTodaySales.toStringAsFixed(2)}', Icons.attach_money),
+                        _buildSummaryList('Hari Ini', '${controller.totalTodayTransactions}', Icons.numbers),
+                      ],
+                    ),
+                  ),
                 ],
               );
             }),
-            const SizedBox(height: 32),
+            const SizedBox(height: 32,),
 
             const Text(
               'Grafik Penjualan',

@@ -65,10 +65,7 @@ class Sidemenu extends StatelessWidget {
           onTap: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.remove('username');
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => LoginView()),
-              (Route<dynamic> route) => false,
-            );
+            Get.toNamed('/');
           },
         ),
       ]),
