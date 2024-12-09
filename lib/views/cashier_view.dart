@@ -103,6 +103,7 @@ class CashierView extends StatelessWidget {
                 return ListTile(
                   title: Text(product.name),
                   subtitle: Text('Rp${product.price}'),
+                  trailing: const Icon(Icons.add), // Add icon here
                   onTap: () {
                     addProduct(product);
                   },

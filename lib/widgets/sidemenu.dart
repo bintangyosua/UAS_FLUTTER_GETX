@@ -31,10 +31,14 @@ class Sidemenu extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return DrawerHeader(
-                child: Text('Welcome, ${snapshot.data}'),
+                decoration: const BoxDecoration(color: Colors.grey),
+                child: Text('Welcome, ${snapshot.data}', style: const TextStyle(color: Colors.white),),
               );
             } else {
-              return const DrawerHeader(child: Text('Unknown User'));
+              return const DrawerHeader(
+                decoration: BoxDecoration(color: Colors.grey),
+                child: Text('Unknown User', style: TextStyle(color: Colors.white),),
+              );
             }
           },
         ),
