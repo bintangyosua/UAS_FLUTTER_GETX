@@ -6,7 +6,7 @@ class LoginController extends GetxController {
   void login(String username, String password) {
     if (username == 'H1D022077' && password == '12345') {
       isLogged.value = true;
-      Get.offAllNamed('/mulan');
+      Get.offAllNamed('/kasir');
     } else {
       Get.snackbar('Error', 'Username atau password salah.');
     }
