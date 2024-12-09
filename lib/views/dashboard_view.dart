@@ -15,8 +15,10 @@ class DashboardView extends StatelessWidget {
     controller.loadSalesData();
 
     return Scaffold(
+      backgroundColor: Colors.white, // White background for the whole screen
       appBar: AppBar(
         title: const Text('Dashboard'),
+        backgroundColor: Colors.white, // Black AppBar
       ),
       drawer: const Sidemenu(), // Sidebar menu
       body: Padding(
@@ -38,8 +40,8 @@ class DashboardView extends StatelessWidget {
 
             // Grafik Penjualan
             const Text(
-              'Grafik Penjualan Hari Ini',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Grafik Penjualan',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             const SizedBox(height: 8),
             Obx(() {
@@ -49,20 +51,22 @@ class DashboardView extends StatelessWidget {
                       height: 250,
                       child: LineChart(
                         LineChartData(
-                          gridData: const FlGridData(show: true),
+                          gridData: const FlGridData(show: true, drawHorizontalLine: true),
                           titlesData: FlTitlesData(
+                            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                             leftTitles: const AxisTitles(
                               sideTitles: SideTitles(showTitles: false),
                             ),
                             bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
+                                interval: 1,
                                 showTitles: true,
                                 getTitlesWidget: (double value, TitleMeta meta) {
-                                  int index = value.toInt(); 
+                                  int index = value.toInt();
                                   if (index >= 0 && index < controller.saleDates.length) {
                                     return Text(
                                       controller.saleDates[index],
-                                      style: const TextStyle(fontSize: 10),
+                                      style: const TextStyle(fontSize: 10, color: Colors.black),
                                     );
                                   } else {
                                     return const Text('');
@@ -71,15 +75,14 @@ class DashboardView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          borderData: FlBorderData(show: true),
+                          borderData: FlBorderData(show: true, border: Border.all(color: Colors.black)),
                           lineBarsData: [
                             LineChartBarData(
                               spots: controller.dailySales.asMap().entries.map((entry) {
                                 return FlSpot(entry.key.toDouble(), entry.value.toDouble());
                               }).toList(),
                               isStrokeCapRound: true,
-                              // colors: [Colors.blue],
-                              // belowBarData: BarChartBarData(show: true, colors: [Colors.blue.withOpacity(0.3)]),
+                              color: Colors.black, // Black color for the line chart
                             ),
                           ],
                         ),
@@ -87,14 +90,6 @@ class DashboardView extends StatelessWidget {
                     );
             }),
             const SizedBox(height: 32),
-
-            // Button Logout
-            ElevatedButton(
-              onPressed: () {
-                Get.offAllNamed('/login');
-              },
-              child: const Text('Logout'),
-            ),
           ],
         ),
       ),
@@ -106,6 +101,7 @@ class DashboardView extends StatelessWidget {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: Colors.white, // White card background
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -113,12 +109,12 @@ class DashboardView extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black), // Black title
             ),
             const SizedBox(height: 8),
             Text(
               value,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black value text
             ),
           ],
         ),
