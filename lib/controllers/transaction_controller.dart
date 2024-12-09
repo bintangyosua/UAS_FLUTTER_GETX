@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter_getx/models/transactions.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TransactionController extends GetxController {
@@ -33,7 +30,6 @@ class TransactionController extends GetxController {
       findTransaction();
 /// the error and displays an error message in a snackbar.
     } catch (e) {
-      print(e);
       Get.snackbar('Error', e.toString());
     } finally {
       isLoading(false);
