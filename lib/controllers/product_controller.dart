@@ -42,15 +42,20 @@ class ProductController extends GetxController {
 
   // Fungsi untuk mengedit produk
   void editProduct(Product product) async {
-    isLoading(true);
-    try {
-      final response = await _supabaseClient.from('products').update(product.toJson()).eq('id', product.id as Object);
-      fetchProducts();  // Refresh data produk setelah berhasil diupdate
-      Get.snackbar('Success', 'Produk berhasil diperbarui');
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading(false);
-    }
+  isLoading(true);
+  try {
+    final response = await _supabaseClient
+        .from('products')
+        .update(product.toJson()) // Menggunakan product yang sudah ada
+        .eq('id', product.id as Object); // Menjamin hanya produk dengan id yang sama yang diperbarui
+
+    Get.snackbar('Success', 'Produk berhasil diperbarui');
+    fetchProducts(); // Refresh data produk setelah berhasil diupdate
+  } catch (e) {
+    Get.snackbar('Error', e.toString());
+  } finally {
+    isLoading(false);
   }
+}
+
 }

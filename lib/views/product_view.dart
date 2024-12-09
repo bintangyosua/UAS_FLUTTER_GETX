@@ -63,67 +63,69 @@ class ProductView extends StatelessWidget {
 
   // Dialog untuk menambah atau mengedit produk
   void _showProductDialog(BuildContext context, [Product? product]) {
-    final nameController = TextEditingController(text: product?.name ?? '');
-    final priceController = TextEditingController(text: product != null ? product.price.toString() : '');
+  final nameController = TextEditingController(text: product?.name ?? '');
+  final priceController = TextEditingController(text: product != null ? product.price.toString() : '');
 
-    Get.dialog(
-      Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Produk',
-                  border: OutlineInputBorder(),
-                ),
+  Get.dialog(
+    Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Nama Produk',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: priceController,
-                decoration: const InputDecoration(
-                  labelText: 'Harga',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: priceController,
+              decoration: const InputDecoration(
+                labelText: 'Harga',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  final name = nameController.text;
-                  final price = double.tryParse(priceController.text) ?? 0.0;
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                final name = nameController.text;
+                final price = double.tryParse(priceController.text) ?? 0.0;
 
-                  if (name.isNotEmpty && price > 0) {
-                    final newProduct = Product(
-                      id: _generateRandomId(),  // Jika product null, id akan auto-generate
-                      name: name,
-                      price: price,
-                    );
+                if (name.isNotEmpty && price > 0) {
+                  // Jika kita sedang mengedit, gunakan ID produk yang sudah ada
+                  final updatedProduct = Product(
+                    id: product?.id ?? _generateRandomId(),  // Gunakan ID yang ada jika produk sudah ada
+                    name: name,
+                    price: price,
+                  );
 
-                    if (product != null) {
-                      // Jika produk sudah ada, lakukan edit
-                      controller.editProduct(newProduct);
-                    } else {
-                      // Jika produk baru, lakukan tambah
-                      controller.addProduct(newProduct);
-                    }
-
-                    Get.back();
+                  if (product != null && product.id != null) {
+                    // Jika produk sudah ada, lakukan edit
+                    controller.editProduct(updatedProduct);
                   } else {
-                    Get.snackbar('Error', 'Nama, harga, dan kuantitas produk harus valid');
+                    // Jika produk baru, lakukan tambah
+                    controller.addProduct(updatedProduct);
                   }
-                },
-                child: Text(product != null ? 'Perbarui Produk' : 'Tambah Produk'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-              ),
-            ],
-          ),
+
+                  Get.back();
+                } else {
+                  Get.snackbar('Error', 'Nama, harga, dan kuantitas produk harus valid');
+                }
+              },
+              child: Text(product != null ? 'Perbarui Produk' : 'Tambah Produk'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   // Dialog konfirmasi untuk menghapus produk
   void _showDeleteDialog(Product product) {

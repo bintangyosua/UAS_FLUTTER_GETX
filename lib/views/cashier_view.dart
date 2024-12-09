@@ -2,13 +2,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_getx/widgets/sidemenu.dart';
 import 'package:flutter_getx/controllers/cashier_controller.dart';
+import 'package:flutter_getx/controllers/product_controller.dart';
 import 'package:flutter_getx/models/products.dart';
 import 'package:flutter_getx/models/transactions.dart';
 import 'package:get/get.dart';
 
 class CashierView extends StatelessWidget {
-  final products = <Product>[].obs; // Daftar produk
+  final products = <Product>[].obs; // Daftar produk transaksi
   final CashierController controller = Get.put(CashierController());
+  final ProductController productController = Get.put(ProductController()); // Mengambil ProductController
   final nameController = TextEditingController();
   final priceController = TextEditingController();
 
@@ -111,22 +113,9 @@ class CashierView extends StatelessWidget {
     );
   }
 
-  void _showDeleteDialog(Product product) {
-    Get.defaultDialog(
-      title: 'Konfirmasi Hapus',
-      middleText: 'Apakah Anda yakin ingin menghapus produk "${product.name}"?',
-      titleStyle: const TextStyle(color: Colors.black),
-      middleTextStyle: const TextStyle(color: Colors.black),
-      onConfirm: () {
-        // Hapus produk dari daftar
-        products.remove(product);
-        Get.back();
-      },
-      onCancel: () => Get.back(),
-      confirmTextColor: Colors.white,
-      cancelTextColor: Colors.black,
-      buttonColor: Colors.black, // Button in black color
-    );
+  // Fungsi untuk menghapus produk dari daftar produk yang dibeli
+  void _deleteProductFromList(Product product) {
+    products.remove(product); // Menghapus produk dari daftar
   }
 
   @override
@@ -143,6 +132,28 @@ class CashierView extends StatelessWidget {
         backgroundColor: Colors.white, // Black FAB
       ),
       drawer: const Sidemenu(),
+      endDrawer: Obx(() {
+        if (productController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return Drawer(
+            child: ListView.builder(
+              itemCount: productController.products.length,
+              itemBuilder: (context, index) {
+                final product = productController.products[index];
+                return ListTile(
+                  title: Text(product.name),
+                  subtitle: Text('Rp${product.price}'),
+                  onTap: () {
+                    // Menambahkan produk dari sidebar ke daftar transaksi
+                    addProduct(product);
+                  },
+                );
+              },
+            ),
+          );
+        }
+      }),
       body: Obx(() => Column(
         children: [
           Expanded(
@@ -163,8 +174,8 @@ class CashierView extends StatelessWidget {
                       ),
                       // Tombol Hapus
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.white), // Black icon
-                        onPressed: () => _showDeleteDialog(product),
+                        icon: const Icon(Icons.delete, color: Colors.red), // Black icon
+                        onPressed: () => _deleteProductFromList(product),
                       ),
                     ],
                   ),

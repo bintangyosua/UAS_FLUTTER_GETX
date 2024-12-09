@@ -7,6 +7,8 @@ class CashierController extends GetxController {
   final _transaction = Supabase.instance.client;
   var isLoading = true.obs;
 
+  get selectedProduct => null;
+
   @override
   void onInit() {
     super.onInit();
@@ -35,4 +37,6 @@ class CashierController extends GetxController {
       isLoading(false);
     }
   }
+
+  void calculateTotalPrice() {}
 }

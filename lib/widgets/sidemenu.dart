@@ -61,7 +61,7 @@ class Sidemenu extends StatelessWidget {
             Get.toNamed('/cashier');
             }),
         ListTile(
-            leading: const Icon(Icons.person),
+            leading: const Icon(Icons.shopping_basket),
             title: const Text('Products'),
             onTap: () {
             Get.toNamed('/products');
