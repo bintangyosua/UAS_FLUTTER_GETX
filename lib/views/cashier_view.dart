@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_getx/components/sidemenu.dart';
+import 'package:flutter_getx/widgets/sidemenu.dart';
 import 'package:flutter_getx/controllers/cashier_controller.dart';
 import 'package:flutter_getx/models/products.dart';
 import 'package:flutter_getx/models/transactions.dart';
