@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Transaction {
   final int? id;
   final int totalPrice;
@@ -19,5 +21,10 @@ class Transaction {
       'id': id,
       'total_price': totalPrice,
     };
+  }
+
+  static String formatRupiah(double amount) {
+    final format = NumberFormat.simpleCurrency(locale: 'id_ID');
+    return format.format(amount);
   }
 }

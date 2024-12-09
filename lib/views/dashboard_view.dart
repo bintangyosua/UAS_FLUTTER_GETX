@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_getx/models/transactions.dart';
 import 'package:flutter_getx/widgets/sidemenu.dart';
 import 'package:flutter_getx/controllers/dashboard_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -32,8 +33,8 @@ class DashboardView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSummaryList('Total', 'Rp${controller.totalSales.toStringAsFixed(2)}', Icons.attach_money),
-                        _buildSummaryList('Keseluruhan', '${controller.totalTransactions}', Icons.numbers),
+                        _buildSummaryList('Total', '${Transaction.formatRupiah(controller.totalSales.value as double)}', Icons.attach_money),
+                        _buildSummaryList('Keseluruhan', '${controller.totalTransactions.value}', Icons.numbers),
                       ],
                     ),
                   ),
@@ -41,7 +42,7 @@ class DashboardView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSummaryList('Total Hari ini', 'Rp${controller.totalTodaySales.toStringAsFixed(2)}', Icons.attach_money),
+                        _buildSummaryList('Total Hari ini', '${Transaction.formatRupiah(controller.totalTodaySales.value)}', Icons.attach_money),
                         _buildSummaryList('Hari Ini', '${controller.totalTodayTransactions}', Icons.numbers),
                       ],
                     ),

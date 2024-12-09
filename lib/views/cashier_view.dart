@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_getx/models/transaction_item.dart';
 import 'package:flutter_getx/widgets/sidemenu.dart';
 import 'package:flutter_getx/controllers/cashier_controller.dart';
 import 'package:flutter_getx/controllers/product_controller.dart';
@@ -8,20 +9,51 @@ import 'package:flutter_getx/models/transactions.dart';
 import 'package:get/get.dart';
 
 class CashierView extends StatelessWidget {
-  final products = <Product>[].obs; // Daftar produk transaksi
+  final products = <TransactionItem>[].obs; // Daftar produk transaksi dengan quantity
   final CashierController controller = Get.put(CashierController());
-  final ProductController productController = Get.put(ProductController()); // Mengambil ProductController
+  final ProductController productController = Get.put(ProductController());
   final nameController = TextEditingController();
   final priceController = TextEditingController();
 
   CashierView({super.key});
 
   void addProduct(Product product) {
-    products.add(product);
+    // Cek apakah produk sudah ada di daftar transaksi
+    final existingItem = products.firstWhereOrNull((item) => item.id == product.id);
+
+    if (existingItem != null) {
+      // Jika produk sudah ada, tambahkan kuantitasnya
+      existingItem.quantity++;
+    } else {
+      // Jika produk belum ada, tambahkan produk baru
+      products.add(TransactionItem(
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1, // Default quantity is 1
+      ));
+    }
+  }
+
+  void _increaseQuantity(TransactionItem item) {
+    // Directly change the quantity of the item, then trigger a UI update
+    item.quantity++;
+    products.refresh(); // This triggers a rebuild of the list
+  }
+
+  void _decreaseQuantity(TransactionItem item) {
+    // If quantity is greater than 1, reduce it; otherwise, remove the item
+    if (item.quantity > 1) {
+      item.quantity--;
+    } else {
+      // Remove the product from the list when quantity reaches 1 and the decrease action is triggered
+      products.remove(item);
+    }
+    products.refresh(); // Trigger the UI update after quantity change or removal
   }
 
   int get totalPrice {
-    return products.fold(0, (sum, item) => (sum + item.price).toInt());
+    return products.fold(0, (sum, item) => sum + (item.price * item.quantity).toInt());
   }
 
   int _generateRandomId() {
@@ -36,96 +68,26 @@ class CashierView extends StatelessWidget {
       titleStyle: const TextStyle(color: Colors.black),
       middleTextStyle: const TextStyle(color: Colors.black),
       onConfirm: () {
-        // Logika menyelesaikan transaksi, misalnya mengirim data ke server
+        // Logika menyelesaikan transaksi
         controller.addTransaction(Transaction(id: _generateRandomId(), totalPrice: totalPrice));
-        products.clear();
-        Get.back();
+        products.clear(); // Clear products after transaction completion
+        Get.back(); // Close the dialog
       },
       onCancel: () => Get.back(),
       confirmTextColor: Colors.white,
       cancelTextColor: Colors.black,
-      buttonColor: Colors.black, // Button in black color
+      buttonColor: Colors.black,
     );
   }
 
-  void _showDialog({Product? product}) {
-    // Jika produk ada, set nama dan harga produk ke dalam controller
-    if (product != null) {
-      nameController.text = product.name;
-      priceController.text = product.price.toString();
-    } else {
-      nameController.clear();
-      priceController.clear();
-    }
-
-    Get.dialog(
-      Dialog(
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Produk',
-                  labelStyle: TextStyle(color: Colors.black), // Black label text
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: priceController,
-                decoration: const InputDecoration(
-                  labelText: 'Harga',
-                  labelStyle: TextStyle(color: Colors.black), // Black label text
-                ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  final name = nameController.text;
-                  final price = double.tryParse(priceController.text) ?? 0.0;
-
-                  if (name.isNotEmpty && price > 0) {
-                    if (product != null) {
-                      // Update produk yang ada
-                      int index = products.indexOf(product);
-                      if (index != -1) {
-                        products[index] = Product(name: name, price: price);
-                      }
-                    } else {
-                      // Menambahkan produk baru
-                      addProduct(Product(name: name, price: price));
-                    }
-                    Get.back();
-                  } else {
-                    Get.snackbar('Error', 'Nama produk dan harga harus valid', backgroundColor: Colors.black, colorText: Colors.white);
-                  }
-                },
-                child: Text(product != null ? 'Perbarui' : 'Tambah', style: TextStyle(color: Colors.black),),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.white), // Black button
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Fungsi untuk menghapus produk dari daftar produk yang dibeli
-  void _deleteProductFromList(Product product) {
-    products.remove(product); // Menghapus produk dari daftar
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // White background for the whole screen
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Halaman Kasir'),
-        backgroundColor: Colors.white, // Black AppBar
+        backgroundColor: Colors.white,
       ),
       drawer: const Sidemenu(),
       endDrawer: Obx(() {
@@ -142,7 +104,6 @@ class CashierView extends StatelessWidget {
                   title: Text(product.name),
                   subtitle: Text('Rp${product.price}'),
                   onTap: () {
-                    // Menambahkan produk dari sidebar ke daftar transaksi
                     addProduct(product);
                   },
                 );
@@ -156,12 +117,12 @@ class CashierView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (products.isEmpty)
-              Expanded(
+              const Expanded(
                 child: Center(
                   child: Text(
                     'Belum ada produk di dalam daftar transaksi. Klik button kanan atas untuk menambahkan produk.',
-                    textAlign: TextAlign.center, // Center the text
-                    style: const TextStyle(
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -169,27 +130,32 @@ class CashierView extends StatelessWidget {
                   ),
                 ),
               ),
-            if (products.isNotEmpty) 
+            if (products.isNotEmpty)
               Expanded(
                 child: ListView.builder(
                   itemCount: products.length,
                   itemBuilder: (context, index) {
-                    final product = products[index];
+                    final item = products[index];
                     return ListTile(
-                      title: Text(product.name, style: const TextStyle(color: Colors.black)), // Black text
-                      subtitle: Text('Harga: Rp${product.price.toStringAsFixed(2)}', style: const TextStyle(color: Colors.black)), // Black text
+                      title: Text(item.name, style: const TextStyle(color: Colors.black)),
+                      subtitle: Text('Harga: ${Transaction.formatRupiah(item.price)} x ${item.quantity}', style: const TextStyle(color: Colors.black)),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Tombol Edit
+                          // Tombol tambah kuantitas
                           IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.black), // Black icon
-                            onPressed: () => _showDialog(product: product),
+                            icon: const Icon(Icons.add, color: Colors.black),
+                            onPressed: () {
+                              _increaseQuantity(item); // Increase quantity
+                            },
                           ),
-                          // Tombol Hapus
+                          Text(item.quantity.toString(), style: const TextStyle(color: Colors.black, fontSize: 18)),
+                          // Tombol kurangi kuantitas
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red), // Black icon
-                            onPressed: () => _deleteProductFromList(product),
+                            icon: const Icon(Icons.remove, color: Colors.black),
+                            onPressed: () {
+                              _decreaseQuantity(item); // Decrease quantity
+                            },
                           ),
                         ],
                       ),
@@ -204,11 +170,11 @@ class CashierView extends StatelessWidget {
                 children: [
                   const Text(
                     'Total Harga:',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black text
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   Text(
-                    'Rp${totalPrice.toStringAsFixed(2)}',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black text
+                    '${Transaction.formatRupiah(totalPrice as double)}',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                 ],
               ),
@@ -218,7 +184,7 @@ class CashierView extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: products.isEmpty ? null : completeTransaction,
                 child: const Text('Selesaikan Transaksi'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.white), // Black button
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
               ),
             ),
           ],

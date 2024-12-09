@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx/controllers/product_controller.dart';
 import 'package:flutter_getx/models/products.dart';
+import 'package:flutter_getx/models/transactions.dart';
 import 'package:flutter_getx/widgets/sidemenu.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -36,7 +37,7 @@ class ProductView extends StatelessWidget {
             final product = controller.products[index];
             return ListTile(
               title: Text(product.name, style: const TextStyle(color: Colors.black)),
-              subtitle: Text('Harga: Rp${product.price.toStringAsFixed(2)}', style: const TextStyle(color: Colors.black)),
+              subtitle: Text('Harga: ${Transaction.formatRupiah(product.price)}', style: const TextStyle(color: Colors.black)),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
