@@ -3,7 +3,7 @@
  <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
 </p> -->
 
-<h3 align="center">Flutter GetX</h3>
+<h1 align="center">UAS Pemrograman Mobile</h1>
 
 <div align="center">
 
@@ -12,27 +12,21 @@
 
 </div>
 
----
+## User
+```yaml
+username: admin
+password: admin
+```
 
-<p align="center"> Using GetX to modify or manage Flutter States
-    <br> 
-</p>
+## Technologies Used
+- Flutter
+- Supabase
+- F1 Chart
 
-## 📝 Table of Contents
+## ✍️ Author <a name = "authors"></a>
 
-- [📝 Table of Contents](#-table-of-contents)
-- [🧐 About ](#-about-)
-- [✍️ Authors ](#️-authors-)
-- [🎉 Acknowledgements ](#-acknowledgements-)
-
-## 🧐 About <a name = "about"></a>
-
-This project is one of my college assignments.
-
-## ✍️ Authors <a name = "authors"></a>
-
-- [@bintangyosua](https://github.com/bintangyosua) - Entire works
+- [@bintangyosua](https://github.com/bintangyosua)
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
-Shout out to my lecturer. Thank you Sir.
+Shout out to my lecturer. Thank you.
