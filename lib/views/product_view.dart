@@ -19,6 +19,7 @@ class ProductView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Daftar Produk'),
         backgroundColor: Colors.white,

@@ -24,6 +24,7 @@ class Sidemenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.white,
       child: ListView(children: [
         // FutureBuilder<String?>(
         //   future: getUsername(context),

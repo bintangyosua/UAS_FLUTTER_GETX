@@ -126,11 +126,6 @@ class CashierView extends StatelessWidget {
         title: const Text('Halaman Kasir'),
         backgroundColor: Colors.white, // Black AppBar
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showDialog(),
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.white, // Black FAB
-      ),
       drawer: const Sidemenu(),
       endDrawer: Obx(() {
         if (productController.isLoading.value) {
