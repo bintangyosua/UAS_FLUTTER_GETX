@@ -51,7 +51,7 @@ class Sidemenu extends StatelessWidget {
           leading: const Icon(Icons.home),
           title: const Text('Dashboard'),
           onTap: () {
-            Get.toNamed('/mulan');
+            Get.toNamed('/dashboard');
           },
         ),
         ListTile(
