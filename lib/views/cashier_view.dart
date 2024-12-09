@@ -60,6 +60,7 @@ class CashierView extends StatelessWidget {
 
     Get.dialog(
       Dialog(
+        backgroundColor: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -132,6 +133,7 @@ class CashierView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Drawer(
+            backgroundColor: Colors.white,
             child: ListView.builder(
               itemCount: productController.products.length,
               itemBuilder: (context, index) {
@@ -149,61 +151,79 @@ class CashierView extends StatelessWidget {
           );
         }
       }),
-      body: Obx(() => Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return ListTile(
-                  title: Text(product.name, style: const TextStyle(color: Colors.black)), // Black text
-                  subtitle: Text('Harga: Rp${product.price.toStringAsFixed(2)}', style: const TextStyle(color: Colors.black)), // Black text
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Tombol Edit
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.black), // Black icon
-                        onPressed: () => _showDialog(product: product),
-                      ),
-                      // Tombol Hapus
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red), // Black icon
-                        onPressed: () => _deleteProductFromList(product),
-                      ),
-                    ],
+      body: Obx(() {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (products.isEmpty)
+              Expanded(
+                child: Center(
+                  child: Text(
+                    'Belum ada produk di dalam daftar transaksi. Klik button kanan atas untuk menambahkan produk.',
+                    textAlign: TextAlign.center, // Center the text
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Total Harga:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black text
                 ),
-                Text(
-                  'Rp${totalPrice.toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black text
+              ),
+            if (products.isNotEmpty) 
+              Expanded(
+                child: ListView.builder(
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return ListTile(
+                      title: Text(product.name, style: const TextStyle(color: Colors.black)), // Black text
+                      subtitle: Text('Harga: Rp${product.price.toStringAsFixed(2)}', style: const TextStyle(color: Colors.black)), // Black text
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Tombol Edit
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.black), // Black icon
+                            onPressed: () => _showDialog(product: product),
+                          ),
+                          // Tombol Hapus
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red), // Black icon
+                            onPressed: () => _deleteProductFromList(product),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ],
+              ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Total Harga:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black text
+                  ),
+                  Text(
+                    'Rp${totalPrice.toStringAsFixed(2)}',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black text
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: products.isEmpty ? null : completeTransaction,
-              child: const Text('Selesaikan Transaksi'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.white), // Black button
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: products.isEmpty ? null : completeTransaction,
+                child: const Text('Selesaikan Transaksi'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.white), // Black button
+              ),
             ),
-          ),
-        ],
-      )),
+          ],
+        );
+      }),
     );
   }
 }

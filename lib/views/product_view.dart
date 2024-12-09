@@ -69,6 +69,7 @@ class ProductView extends StatelessWidget {
 
   Get.dialog(
     Dialog(
+      backgroundColor: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -131,6 +132,7 @@ class ProductView extends StatelessWidget {
   // Dialog konfirmasi untuk menghapus produk
   void _showDeleteDialog(Product product) {
     Get.defaultDialog(
+      backgroundColor: Colors.white,
       title: 'Konfirmasi Hapus',
       middleText: 'Apakah Anda yakin ingin menghapus produk "${product.name}"?',
       onConfirm: () async {
