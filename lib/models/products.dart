@@ -4,7 +4,7 @@ class Product {
   final double price;
 
   const Product({
-     this.id,
+    this.id,
     required this.name,
     required this.price,
   });

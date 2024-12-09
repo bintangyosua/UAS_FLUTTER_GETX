@@ -5,8 +5,9 @@ import 'package:intl/intl.dart'; // For date formatting
 class DashboardController extends GetxController {
   var dailySales = <int>[].obs;  // Daftar untuk menyimpan total harga transaksi
   var saleDates = <String>[].obs; // Daftar untuk menyimpan tanggal transaksi
-  var totalSalesToday = 0.obs;    // Total penjualan hari ini
+  var totalSales = 0.obs;    // Total penjualan hari ini
   var totalTransactions = 0.obs;  // Jumlah transaksi
+  var meanSales = 0.00.obs;
 
   // Fungsi untuk memuat data penjualan dari Supabase
   Future<void> loadSalesData() async {
@@ -36,8 +37,9 @@ class DashboardController extends GetxController {
       // Calculate total sales and total transactions
       dailySales.value = salesByDate.values.toList();
       saleDates.value = salesByDate.keys.toList();
-      totalSalesToday.value = dailySales.fold(0, (sum, sale) => sum + sale);
-      totalTransactions.value = dailySales.length;
+      totalSales.value = dailySales.fold(0, (sum, sale) => sum + sale);
+      totalTransactions.value = response.length;
+      meanSales.value = totalSales.value / dailySales.length;
 
       print(saleDates);
     } catch (e) {

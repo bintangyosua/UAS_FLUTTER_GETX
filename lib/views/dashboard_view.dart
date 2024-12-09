@@ -11,34 +11,35 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Memanggil fungsi untuk memuat data saat halaman dibuka
     controller.loadSalesData();
 
     return Scaffold(
-      backgroundColor: Colors.white, // White background for the whole screen
       appBar: AppBar(
         title: const Text('Dashboard'),
-        backgroundColor: Colors.white, // Black AppBar
+        backgroundColor: Colors.white,
       ),
-      drawer: const Sidemenu(), // Sidebar menu
+      drawer: const Sidemenu(),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Ringkasan Penjualan
+            // Ringkasan Penjualan (Total Sales, Average Sales, and Transactions)
             Obx(() {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSummaryCard('Total Penjualan', 'Rp${controller.totalSalesToday.toStringAsFixed(2)}'),
-                  _buildSummaryCard('Jumlah Transaksi', '${controller.totalTransactions}'),
+                  _buildSummaryList('Total Penjualan', 'Rp${controller.totalSales.toStringAsFixed(2)}', Icons.attach_money),
+                  const SizedBox(height: 16), // Space between cards
+                  _buildSummaryList('Rata-rata Penjualan', 'Rp${controller.meanSales.toStringAsFixed(2)}', Icons.attach_money),
+                  const SizedBox(height: 16), // Space between cards
+                  _buildSummaryList('Jumlah Transaksi', '${controller.totalTransactions}', Icons.numbers),
                 ],
               );
             }),
             const SizedBox(height: 32),
 
-            // Grafik Penjualan
             const Text(
               'Grafik Penjualan',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
@@ -96,29 +97,36 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  // Card Ringkasan Penjualan
-  Widget _buildSummaryCard(String title, String value) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      color: Colors.white, // White card background
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black), // Black title
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black), // Black value text
-            ),
-          ],
+  // Card Summary with title and value (Vertical card layout)
+  Widget _buildSummaryList(String title, String value, IconData icon) {
+  return Card(
+    color: Colors.white,
+    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+    child: ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16), // Added padding for better spacing
+      leading: Icon(icon, color: Colors.black),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold, // Bold title for emphasis
+          overflow: TextOverflow.ellipsis, // Prevent overflow for the title
         ),
+        maxLines: 1, // Ensure title fits on one line
+        softWrap: false, // Prevent wrapping of title text
       ),
-    );
-  }
+      subtitle: Text(
+        value,
+        style: const TextStyle(
+          color: Colors.black,
+          overflow: TextOverflow.ellipsis, // Prevent overflow for the subtitle
+        ),
+        maxLines: 1, // Ensure subtitle fits on one line
+        softWrap: false, // Prevent wrapping of subtitle text
+      ),
+    ),
+  );
+}
+
+
 }

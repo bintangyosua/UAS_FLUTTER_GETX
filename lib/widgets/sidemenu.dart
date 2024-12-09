@@ -61,6 +61,12 @@ class Sidemenu extends StatelessWidget {
             Get.toNamed('/cashier');
             }),
         ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Products'),
+            onTap: () {
+            Get.toNamed('/products');
+            }),
+        ListTile(
             leading: const Icon(Icons.exit_to_app_rounded),
             title: const Text('Logout'),
             onTap: () async {
