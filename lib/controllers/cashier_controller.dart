@@ -2,7 +2,7 @@ import 'package:flutter_getx/models/transactions.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class TransactionController extends GetxController {
+class CashierController extends GetxController {
   var transactions = <Transaction>[].obs;
   final _transaction = Supabase.instance.client;
   var isLoading = true.obs;
